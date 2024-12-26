@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -8,7 +9,7 @@ import '../../Home/views/home_view.dart';
 import '../controllers/form_controller.dart';
 
 class FormView extends GetView<FormController> {
-  final FormController controller = Get.put(FormController());
+  final FormController formController= Get.put(FormController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,20 @@ class FormView extends GetView<FormController> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-                SizedBox(height: 100,width: 100,child:  Base64ImageWidget(base64String:Get.arguments['image']),),
-              Text(Get.arguments['serviceName']),
+                SizedBox(height: 100,width: 100,child:  Base64ImageWidget(base64String:formController.image.value),),
+              Text(formController.serviceName.value),
               Expanded(
                 child: ListView(
-                  children: controller.formFields.map((field) {
+                  children: formController.formFields.map((field) {
                     if (field['type'] == 'text') {
                       return TextField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(field['digitLength']),
+
+                        ],
                         decoration: InputDecoration(labelText: field['label']),
                         onChanged: (value) {
-                          controller.updateField(field['label'], value);
+                          formController.updateField(field['label'], value);
                         },
                         keyboardType: field['keyboardType'],
                       );
@@ -48,7 +53,7 @@ class FormView extends GetView<FormController> {
                         onPressed: () async {
                           DateTime? pickedDate = await _selectDate(context);
                           if (pickedDate != null) {
-                            controller.updateField(field['label'], pickedDate.toString());
+                            formController.updateField(field['label'], pickedDate.toString());
                           }
                         },
                         child: Text(field['label']),
@@ -60,9 +65,9 @@ class FormView extends GetView<FormController> {
                           return RadioListTile<String>(
                             title: Text(option),
                             value: option,
-                            groupValue: controller.formData[field['label']],
+                            groupValue: formController.formData[field['label']],
                             onChanged: (value) {
-                              controller.updateField(field['label'], value);
+                              formController.updateField(field['label'], value);
                             },
                           );
                         }).toList(),
@@ -71,9 +76,9 @@ class FormView extends GetView<FormController> {
                     if (field['type'] == 'checkbox') {
                       return DropdownButton<String>(
                         hint: Text(field['label']),
-                        value: controller.formData[field['label']],
+                        value: formController.formData[field['label']],
                         onChanged: (value) {
-                          controller.updateField(field['label'], value);
+                          formController.updateField(field['label'], value);
                         },
                         items: (field['options'] as List<String>).map((option) {
                           return DropdownMenuItem<String>(
@@ -89,10 +94,11 @@ class FormView extends GetView<FormController> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  String? validationMessage = controller.validateForm();
+                  String? validationMessage = formController.validateForm();
                   if (validationMessage == null) {
 
                     Get.snackbar('Success', 'Form submitted successfully!', colorText: Colors.white, backgroundColor: Colors.green);
+                    formController.clearForm();
                   } else {
 
                     Get.snackbar('Error', validationMessage, colorText: Colors.red, backgroundColor: Colors.white);

@@ -4,20 +4,24 @@ import 'package:get/get.dart';
 class FormController extends GetxController {
   var formFields = [].obs;
   var formData = {}.obs;
+  var serviceName=''.obs;
+  var image=''.obs;
 
   @override
   void onInit() {
     super.onInit();
-
     fetchFormDetails();
   }
 
   void fetchFormDetails() async {
+    serviceName.value=Get.arguments['serviceName'];
+
+    image.value=Get.arguments['image'];
 
     formFields.value = [
-      {'type': 'text', 'label': 'Adhar Number', 'required': true, 'keyboardType': TextInputType.number},
+      {'type': 'text', 'label': 'Adhar Number', 'required': true, 'keyboardType': TextInputType.number,'digitLength':12},
       {'type': 'text', 'label': 'Application Number', 'required': true, 'keyboardType': TextInputType.number},
-      {'type': 'text', 'label': 'Mobile Number', 'required': true, 'keyboardType': TextInputType.phone},
+      {'type': 'text', 'label': 'Mobile Number', 'required': true, 'keyboardType': TextInputType.phone,'digitLength':10},
       {'type': 'email', 'label': 'Email', 'required': true},
       {'type': 'text', 'label': 'Residential Address', 'required': true},
       {'type': 'text', 'label': 'Age', 'required': false, 'keyboardType': TextInputType.number},
@@ -76,7 +80,18 @@ class FormController extends GetxController {
     return null;
   }
 
-
+  void clearForm() {
+    //formData.clear();
+    for (var field in formFields) {
+      if (field['type'] == 'text' || field['type'] == 'email') {
+        formData[field['label']] = '';
+        updateField(field['label'],'');
+      } else if (field['type'] == 'radio' || field['type'] == 'checkbox') {
+        formData[field['label']] = null;
+        updateField(field['label'],null);
+      }
+    }
+  }
 
 
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:gramaseva/app/modules/Login/controllers/login_controller.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -14,7 +15,9 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(title: Text(homeController.box.read('email')),actions: [IconButton(onPressed: (){}, icon: Icon(Icons.notification_important_outlined))],backgroundColor: Colors.lightBlueAccent.withOpacity(0.2), ),
+       appBar: AppBar(title: Text(homeController.box.read('email')),actions: [IconButton(onPressed: (){}, icon: Icon(Icons.notification_important_outlined)),IconButton(onPressed: (){
+         Get.put(LoginController()).logout();
+       }, icon: Icon(Icons.logout))],backgroundColor: Colors.lightBlueAccent.withOpacity(0.2), ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

@@ -27,11 +27,11 @@ class LoginController extends GetxController {
     final storedEmail = box.read('email') ?? 'sree@sree.com';
     final storedPassword = box.read('password') ?? 'pass12345';
 
-    if (email == storedEmail && password == storedPassword) {
-      saveCredentials(storedEmail, storedPassword);
+    if (email.isNotEmpty /*== storedEmail*/ && password.isNotEmpty /*== storedPassword*/) {
+      saveCredentials(email, password);
       Get.offNamed('/home');
     } else {
-      loginError.value = "Invalid credentials";
+      loginError.value = "Enter valid credentials";
     }
   }
 
@@ -39,5 +39,11 @@ class LoginController extends GetxController {
     box.write('email', email);
     box.write('password', password);
 
+  }
+
+  void logout() {
+    box.remove('email');
+    box.remove('password');
+    Get.offNamed('/login');
   }
 }
