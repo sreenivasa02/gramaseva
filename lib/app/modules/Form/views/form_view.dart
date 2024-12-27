@@ -96,9 +96,15 @@ class FormView extends GetView<FormController> {
                 onPressed: () {
                   String? validationMessage = formController.validateForm();
                   if (validationMessage == null) {
+                   formController.clearForm();
 
-                    Get.snackbar('Success', 'Form submitted successfully!', colorText: Colors.white, backgroundColor: Colors.green);
-                    formController.clearForm();
+                    Get.snackbar(
+                      'Success',
+                      'Form submitted successfully! Application Number: ${controller.applicationNumber.value}',
+                      colorText: Colors.white,
+                      backgroundColor: Colors.green,
+                    );
+                   Get.toNamed('/home');
                   } else {
 
                     Get.snackbar('Error', validationMessage, colorText: Colors.red, backgroundColor: Colors.white);

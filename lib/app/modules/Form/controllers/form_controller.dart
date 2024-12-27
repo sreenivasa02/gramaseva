@@ -6,7 +6,7 @@ class FormController extends GetxController {
   var formData = {}.obs;
   var serviceName=''.obs;
   var image=''.obs;
-
+  var applicationNumber = ''.obs;
   @override
   void onInit() {
     super.onInit();
@@ -77,6 +77,7 @@ class FormController extends GetxController {
         }
       }
     }
+    applicationNumber.value = formData['Application Number'] ?? '';
     return null;
   }
 

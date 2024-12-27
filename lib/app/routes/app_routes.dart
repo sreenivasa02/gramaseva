@@ -6,6 +6,8 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const HOME = _Paths.HOME;
   static const FORM = _Paths.FORM;
+  static const INTERNET_CONNECTIVITY_CHECKER =
+      _Paths.INTERNET_CONNECTIVITY_CHECKER;
 }
 
 abstract class _Paths {
@@ -13,4 +15,5 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const HOME = '/home';
   static const FORM = '/form';
+  static const INTERNET_CONNECTIVITY_CHECKER = '/internet-connectivity-checker';
 }
